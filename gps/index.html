@@ -6,8 +6,6 @@
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   <script src="https://unpkg.com/aframe-aabb-collider-component@^2.2.1/dist/aframe-aabb-collider-component.min.js"></script>
 
-<!--     <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
--->
 <script src="./component.js"></script>
 
 <script src="./aframe-mapbox-component.min.js"></script>
@@ -94,7 +92,7 @@
       setProperty(markerEl, 'visible', true);
 
       var lat_parint = parseInt(lat);
-      console.log(lat_parint)
+      // console.log(lat_parint)
 
       if(lat_parint == 41){
        // setProperty(CaixaHome,'position', mapEl.components.mapbox.project("-8.645636","41.063566")); 
@@ -151,7 +149,7 @@
     const lng = position.coords.longitude;
     const lat = position.coords.latitude;
 
-    console.log('setting new pos ', lat , ' ' , lng);
+    //console.log('setting new pos ', lat , ' ' , lng);
 
 
 
