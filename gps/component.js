@@ -18,7 +18,7 @@ var count = 0;
 AFRAME.registerComponent("foo_sphere", {
 	init: function() {
 		this.el.addEventListener("hitstart", (e) => {
-			console.log(e);
+			//console.log(e);
 		
 			if(count == 0){
 				document.getElementById("box_colidida").setAttribute('color', "green");
