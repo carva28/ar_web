@@ -10,22 +10,22 @@
     <a-scene>
       <a-entity
         id="map"
-        geometry="primitive: plane; width: 7; height: 4;"
+        geometry="primitive: plane; width: 100; height: 40;"
         material="color: #ffffff; shader: flat; side: both; transparent: true;"
-        position="0 2 -2"
-        mapbox="
-        accessToken: pk.eyJ1IjoibWF0dHJlIiwiYSI6IjRpa3ItcWcifQ.s0AGgKi0ai23K5OJvkEFnA;
-        style: mapbox://styles/mapbox/outdoors-v10;
+        position="0 0 0"
+        rotation="-90 0 0"
+    mapbox="
+    accessToken: pk.eyJ1IjoibWF0dHJlIiwiYSI6IjRpa3ItcWcifQ.s0AGgKi0ai23K5OJvkEFnA;
+    style: mapbox://styles/mapbox/outdoors-v10;
+    center: -8.733497,40.643584;
+    zoom: 16;
         "
       >
         <a-sphere id="marker" color="#EF2D5E" position="0 0 0" visible="false" radius="0.1"></a-sphere>
       </a-entity>
 
       <a-sky color="#ECECEC"></a-sky>
-      <a-box position="0 4 -2" width="7.1" height="0.1" depth="0.1" color="#4CC3D9"></a-box>
-      <a-box position="0 0 -2" width="7.1" height="0.1" depth="0.1" color="#4CC3D9"></a-box>
-      <a-box position="3.5 2 -2" width="0.1" height="4.1" depth="0.1" color="#4CC3D9"></a-box>
-      <a-box position="-3.5 2 -2" width="0.1" height="4.1" depth="0.1" color="#4CC3D9"></a-box>
+ 
 
       <a-entity position="0 0 3.8">
         <a-camera></a-camera>
@@ -43,7 +43,7 @@
             const lat = position.coords.latitude;
 
             setProperty(mapEl, 'mapbox.center', lng + ',' + lat);
-            setProperty(mapEl, 'mapbox.zoom', '10');
+            setProperty(mapEl, 'mapbox.zoom', '16');
 
             setProperty(markerEl, 'position', mapEl.components.mapbox.project(lng, lat));
             setProperty(markerEl, 'visible', true);
