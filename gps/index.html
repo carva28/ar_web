@@ -6,9 +6,8 @@
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   <script src="./aframe-aabb-collider-component.min.js"></script>
 
-<script src="./component.js"></script>
-
 <script src="./aframe-mapbox-component.min.js"></script>
+<script src="./component.js"></script>
 
 </head>
 <body>
@@ -39,15 +38,11 @@
 
     <a-box scale="1 0.3 0.3" visible="false" class="box" material="color: orange; opacity: 0.5" id="box_colidida_2" position="0 0 0" rotation="0 45 0"  ></a-box>
     <a-text value="Cais S.Jacinto" id="text_poi"   visible="false" align="center" position="0 0 0" text="" color="black" wrap-count="20"></a-text>
-<!--     <a-box scale="0.3 0.5 0.5" visible="false" class="box" material="color: green; opacity: 0.5" id="box_home" position="0 0 0" rotation="0 0 0" ></a-box>
--->  </a-plane>
+ </a-plane>
 
 <a-sky color="#ECECEC"></a-sky>
-<!--     <a-plane id="text_poi" geometry="primitive: plane; width: 3; height: 3;" position="0 0.8 0" rotation="0 0 0" material="">
--->        
-<!--  <a-text value="Cais S.Jacinto" id="text_poi"   visible="true" align="center" position="0 0.8 0" text="" color="black" wrap-count="20"></a-text>
- --><!--   </a-plane>
--->  <a-entity position="0 0 0" id="camera_control">
+
+<a-entity position="0 0 0" id="camera_control">
   <a-camera foo movement-controls="speed: -0.5;" id="camera_id" position="0 0.8 1"  geometry="primitive: box" aabb-collider="objects: .box" >
     <!--     <a-cursor></a-cursor> -->
 
@@ -73,12 +68,6 @@
   var setProperty = window.AFRAME.utils.entity.setComponentProperty;
 
 
-
-  
-  // var textpoi_pos = document.getElementById('text_poi').getAttribute("position");
-  
-
-
   mapEl.addEventListener('mapbox-loaded', function() {
     navigator.geolocation.watchPosition(position => {
 
@@ -92,7 +81,7 @@
       setProperty(markerEl, 'visible', true);
 
       var lat_parint = parseInt(lat);
-      // console.log(lat_parint)
+
 
       if(lat_parint == 41){
        // setProperty(CaixaHome,'position', mapEl.components.mapbox.project("-8.645636","41.063566")); 
@@ -220,7 +209,7 @@
     //console.log("Ainda em viagem :) ");
   }
 
-}, 4000);
+}, 5000);
 
 
 
