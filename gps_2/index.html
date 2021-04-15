@@ -41,7 +41,7 @@
       const lat = position.coords.latitude;
 
       setProperty(mapEl, 'mapbox.center', lng + ',' + lat);
-      setProperty(mapEl, 'mapbox.zoom', '10');
+      setProperty(mapEl, 'mapbox.zoom', '16');
 
       setProperty(markerEl, 'position', mapEl.components.mapbox.project(lng, lat));
       setProperty(markerEl, 'visible', true);
