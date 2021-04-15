@@ -1,38 +1,85 @@
 <html>
 <head>
-  <title>A-Frame Map - GPS</title>
+  <title>Routinav VR A-Frame Map - GPS</title>
+  <link rel="stylesheet" href="./styles.css">
+
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-  <script src="./aframe-mapbox-component.min.js"></script>
+  <script src="https://unpkg.com/aframe-aabb-collider-component@^2.2.1/dist/aframe-aabb-collider-component.min.js"></script>
+
+<!--     <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
+-->
+<script src="./component.js"></script>
+
+<script src="./aframe-mapbox-component.min.js"></script>
+
 </head>
 <body>
+  <div class="show_div">
+    <select>
+      <option value="1">Ria de Aveiro</option>
+      <option value="2">Porto</option>
+      <option value="3">Other region</option>
+    </select>
+  </div>
+
   <a-scene>
-    <a-entity
+    <a-plane
     id="map"
-    geometry="primitive: plane; width: 7; height: 4;"
+    geometry="primitive: plane; width: 150; height: 70;"
     material="color: #ffffff; shader: flat; side: both; transparent: true;"
-    position="0 2 -2"
+    position="0 0 0"
+    rotation="-90 0 0"
     mapbox="
     accessToken: pk.eyJ1IjoibWF0dHJlIiwiYSI6IjRpa3ItcWcifQ.s0AGgKi0ai23K5OJvkEFnA;
     style: mapbox://styles/mapbox/outdoors-v10;
+    center: -8.733497,40.643584;
+    zoom: 16;
     "
     >
-    <a-sphere id="marker" color="#EF2D5E" position="0 0 0" visible="false" radius="0.1"></a-sphere>
-  </a-entity>
+    <a-sphere  foo_sphere id="marker" color="#EF2D5E" position="0 0 0" visible="false" radius="0.1" aabb-collider="objects: .box" ></a-sphere>
+    <a-box scale="1 0.3 0.3" visible="false" class="box" material="color: blue; opacity: 0.5" id="box_colidida" position="0 0 0" rotation="0 45 0"  ></a-box>
 
-  <a-sky color="#ECECEC"></a-sky>
-  <a-box position="0 4 -2" width="7.1" height="0.1" depth="0.1" color="#4CC3D9"></a-box>
-  <a-box position="0 0 -2" width="7.1" height="0.1" depth="0.1" color="#4CC3D9"></a-box>
-  <a-box position="3.5 2 -2" width="0.1" height="4.1" depth="0.1" color="#4CC3D9"></a-box>
-  <a-box position="-3.5 2 -2" width="0.1" height="4.1" depth="0.1" color="#4CC3D9"></a-box>
+    <a-box scale="1 0.3 0.3" visible="false" class="box" material="color: orange; opacity: 0.5" id="box_colidida_2" position="0 0 0" rotation="0 45 0"  ></a-box>
+    <a-text value="Cais S.Jacinto" id="text_poi"   visible="false" align="center" position="0 0 0" text="" color="black" wrap-count="20"></a-text>
+<!--     <a-box scale="0.3 0.5 0.5" visible="false" class="box" material="color: green; opacity: 0.5" id="box_home" position="0 0 0" rotation="0 0 0" ></a-box>
+-->  </a-plane>
 
-  <a-entity position="0 0 3.8">
-    <a-camera></a-camera>
+<a-sky color="#ECECEC"></a-sky>
+<!--     <a-plane id="text_poi" geometry="primitive: plane; width: 3; height: 3;" position="0 0.8 0" rotation="0 0 0" material="">
+-->        
+<!--  <a-text value="Cais S.Jacinto" id="text_poi"   visible="true" align="center" position="0 0.8 0" text="" color="black" wrap-count="20"></a-text>
+ --><!--   </a-plane>
+-->  <a-entity position="0 0 0" id="camera_control">
+  <a-camera foo movement-controls="speed: -0.5;" id="camera_id" position="0 0.8 1"  geometry="primitive: box" aabb-collider="objects: .box" >
+    <!--     <a-cursor></a-cursor> -->
+
+    <a-sphere color="green" position="0 -1 -1" visible="true" radius="0.3" height=".5" ></a-sphere>
+
   </a-entity>
+</a-camera>
+</a-entity>
+
 </a-scene>
+
+
+
 <script>
   const mapEl = document.getElementById('map')
   const markerEl = document.querySelector('#marker');
+  const cameraEl = document.querySelector('#camera_id');
+  const boxEl = document.querySelector('#box_colidida');
+  const textPoiEl = document.querySelector('#text_poi');
+  const CaixaHome = document.querySelector('#box_colidida_2');
+  const cameraEl_control = document.querySelector('#camera_control');
+
   var setProperty = window.AFRAME.utils.entity.setComponentProperty;
+
+
+
+  
+  // var textpoi_pos = document.getElementById('text_poi').getAttribute("position");
+  
+
 
   mapEl.addEventListener('mapbox-loaded', function() {
     navigator.geolocation.watchPosition(position => {
@@ -41,10 +88,45 @@
       const lat = position.coords.latitude;
 
       setProperty(mapEl, 'mapbox.center', lng + ',' + lat);
-      setProperty(mapEl, 'mapbox.zoom', '15');
+      setProperty(mapEl, 'mapbox.zoom', '14');
 
       setProperty(markerEl, 'position', mapEl.components.mapbox.project(lng, lat));
       setProperty(markerEl, 'visible', true);
+
+      var lat_parint = parseInt(lat);
+      console.log(lat_parint)
+
+      if(lat_parint == 41){
+       // setProperty(CaixaHome,'position', mapEl.components.mapbox.project("-8.645636","41.063566")); 
+       // setProperty(CaixaHome, 'visible', true);
+       setProperty(CaixaHome,'position', mapEl.components.mapbox.project("-8.646693"," 41.063437"));
+       setProperty(CaixaHome, 'visible', true);
+
+       
+       setProperty(cameraEl_control, 'position', mapEl.components.mapbox.project(lng, lat));
+
+     }else{
+
+      setProperty(boxEl, 'position', mapEl.components.mapbox.project("-8.736424","40.652470"));
+      setProperty(boxEl, 'visible', true);
+
+      setProperty(textPoiEl, 'position', mapEl.components.mapbox.project("-8.736424","40.652470"));
+      setProperty(textPoiEl, 'rotation', "90 0 0");
+      setProperty(textPoiEl, 'visible', true);
+
+      var textpoi_pos = document.getElementById('text_poi').getAttribute("position");
+      var textpoi_rot = document.getElementById('text_poi').getAttribute("rotation");
+
+      textpoi_pos.z = 2;
+      setProperty(textPoiEl, 'position', textpoi_pos);
+    }
+
+
+
+
+      // setProperty(cameraEl, 'position', mapEl.components.mapbox.project(lng, lat));
+
+
 
     }, error => {
       console.error(error);
@@ -58,31 +140,67 @@
    max = Math.floor(1);
    let randomNumber = Math.random() * (max - min) + min;
    let partInteiro = parseInt(randomNumber);
-   console.log(partInteiro);
+
+
+
 
 
    navigator.geolocation.watchPosition(position => {
-     
+
 
     const lng = position.coords.longitude;
     const lat = position.coords.latitude;
 
-    console.log('setting new pos ', lat , ' ' , lng)
+    console.log('setting new pos ', lat , ' ' , lng);
+
+
+
     setProperty(markerEl, 'visible', false);
             // mapEl.setAttribute('mapbox', 'center', lng + ',' + lat);
+            setProperty(mapEl, 'mapbox.center', lng + ',' + lat);
+            setProperty(mapEl, 'mapbox.zoom', '14');
             setProperty(markerEl, 'position', mapEl.components.mapbox.project(lng, lat));
             setProperty(markerEl, 'visible', true);
 
-            if(partInteiro == 1){
-              setProperty(markerEl, 'color', "yellow");
-            }else if(partInteiro == 2){
-              setProperty(markerEl, 'color', "blue");
-            }else if(partInteiro == 3){
-              setProperty(markerEl, 'color', "orange");
-            }else if(partInteiro == 4){
-              setProperty(markerEl, 'color', "red");
-            }
+            setProperty(cameraEl_control, 'position', mapEl.components.mapbox.project(lng, lat));
+            var lat_parint = parseInt(lat);
+            console.log(lat_parint)
 
+            if(lat_parint == 41){
+       // setProperty(CaixaHome,'position', mapEl.components.mapbox.project("-8.645636","41.063566")); 
+       // setProperty(CaixaHome, 'visible', true);
+       setProperty(CaixaHome,'position', mapEl.components.mapbox.project("-8.646693"," 41.063437"));
+       setProperty(CaixaHome, 'visible', true);
+
+       
+       setProperty(cameraEl_control, 'position', mapEl.components.mapbox.project(lng, lat));
+
+     }else{
+
+      setProperty(boxEl, 'position', mapEl.components.mapbox.project("-8.736424","40.652470"));
+      setProperty(boxEl, 'visible', true);
+
+      setProperty(textPoiEl, 'position', mapEl.components.mapbox.project("-8.736424","40.652470"));
+      setProperty(textPoiEl, 'rotation', "90 0 0");
+      setProperty(textPoiEl, 'visible', true);
+
+      var textpoi_pos = document.getElementById('text_poi').getAttribute("position");
+      var textpoi_rot = document.getElementById('text_poi').getAttribute("rotation");
+
+      textpoi_pos.z = 2;
+      setProperty(textPoiEl, 'position', textpoi_pos);
+    }
+
+
+    if(partInteiro == 1){
+      setProperty(markerEl, 'color', "yellow");
+    }else if(partInteiro == 2){
+      setProperty(markerEl, 'color', "blue");
+    }else if(partInteiro == 3){
+      setProperty(markerEl, 'color', "orange");
+    }else if(partInteiro == 4){
+      setProperty(markerEl, 'color', "red");
+    }
 
 
 
@@ -96,7 +214,19 @@
             console.error(error);
           });
 
- }, 5000)
+   var estadoCor_Destino = document.getElementById('box_colidida').getAttribute("material");
+         //console.log(estadoCor_Destino.color);
+         if(estadoCor_Destino.color == "red"){
+    //console.log("Chegou ao seu destino");
+  }else{
+    //console.log("Ainda em viagem :) ");
+  }
+
+}, 4000);
+
+
+
+
 </script>
 </body>
 </html>

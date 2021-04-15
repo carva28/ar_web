@@ -1,0 +1,20 @@
+.show_div{
+	z-index: 99999;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	width: 20%;
+	background-color: #1072fe;
+	height: 130px;
+}
+
+.show_div select{
+	background-color: white;
+    border: none;
+    margin: auto;
+    display: block;
+    width: 80%;
+    height: 50px;
+    margin-top: 20px;
+    font-size: 1.7rem;
+}
