@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Add a 3D model</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+    <script src="https://unpkg.com/three@0.126.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src='https://unpkg.com/@turf/turf@6.3.0/turf.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+
+
+    <div id="map"></div>
+    <script>
+	// TO MAKE THE MAP APPEAR YOU MUST
+	// ADD YOUR ACCESS TOKEN FROM
+	// https://account.mapbox.com
+	mapboxgl.accessToken = 'pk.eyJ1IjoiZGNhcnZhIiwiYSI6ImNqcG1tOXMyMjAwaHM0M254Z3ZsM2FjdDIifQ.MyPdO3CMWvrH9xL7EwyeXA';
+    var map = (window.map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        zoom: 20,
+        center: [-8.644384,41.064657],
+        // pitch: 60,
+        pitch: 70,
+        antialias: true // create the gl context with MSAA antialiasing, so custom layers are antialiased
+    }));
+
+
+    var geolocate = new mapboxgl.GeolocateControl({
+        positionOptions: {
+            enableHighAccuracy: true
+        },
+        trackUserLocation: true,
+    });
+
+// Add geolocate control to the map.
+map.addControl(geolocate);
+
+geolocate.on('geolocate', function(e) {
+  var lon = e.coords.longitude;
+  var lat = e.coords.latitude
+  var position = [lon, lat];
+  //console.log(position);
+  map.flyTo({
+    center: position,
+    pitch:70,
+    zoom:20
+});
+
+});
+
+
+function checkUserPostion(position) {
+  const {latitude, longitude} = position.coords;
+
+  var points = turf.points([
+    [longitude, latitude],
+    
+    ]);
+
+  var searchWithin = turf.polygon([[
+    [
+    -8.6444592,
+    41.0639671
+    ],
+    [
+    -8.644419,
+    41.0641046
+    ],
+    [
+    -8.6443922,
+    41.0642644
+    ],
+    [
+    -8.6443922,
+    41.0643534
+    ],
+    [
+    -8.6443868,
+    41.064412
+    ],
+    [
+    -8.644469,
+    41.0644444
+    ],
+    [
+    -8.6445283,
+    41.0645031
+    ],
+    [
+    -8.6445126,
+    41.0645758
+    ],
+    [
+    -8.6445143,
+    41.0646389
+    ],
+    [
+    -8.6445092,
+    41.064672
+    ],
+    [
+    -8.6444687,
+    41.0646984
+    ],
+    [
+    -8.644414,
+    41.0647211
+    ],
+    [
+    -8.6443883,
+    41.0647334
+    ],
+    [
+    -8.6443726,
+    41.0647511
+    ],
+    [
+    -8.6443528,
+    41.0647657
+    ],
+    [
+    -8.6443119,
+    41.0647827
+    ],
+    [
+    -8.6442795,
+    41.0648145
+    ],
+    [
+    -8.6442574,
+    41.0648531
+    ],
+    [
+    -8.6442112,
+    41.0649299
+    ],
+    [
+    -8.6441703,
+    41.0649856
+    ],
+    [
+    -8.6441515,
+    41.0650422
+    ],
+    [
+    -8.6441273,
+    41.0651009
+    ],
+    [
+    -8.6440496,
+    41.0651535
+    ],
+    [
+    -8.6439986,
+    41.0651373
+    ],
+    [
+    -8.6439396,
+    41.065113
+    ],
+    [
+    -8.6439235,
+    41.0650584
+    ],
+    [
+    -8.6439396,
+    41.0649775
+    ],
+    [
+    -8.6439718,
+    41.0649371
+    ],
+    [
+    -8.6439745,
+    41.06484
+    ],
+    [
+    -8.6439691,
+    41.0647793
+    ],
+    [
+    -8.6439798,
+    41.0647025
+    ],
+    [
+    -8.6439691,
+    41.0645892
+    ],
+    [
+    -8.6439691,
+    41.064478
+    ],
+    [
+    -8.6440469,
+    41.0642677
+    ],
+    [
+    -8.644122,
+    41.064201
+    ],
+    [
+    -8.6441434,
+    41.0640351
+    ],
+    [
+    -8.6442105,
+    41.0639482
+    ],
+    [
+    -8.6442644,
+    41.0638778
+    ],
+    [
+    -8.6443636,
+    41.0637808
+    ],
+    [
+    -8.644369,
+    41.0635988
+    ],
+    [
+    -8.6443985,
+    41.0635138
+    ],
+    [
+    -8.6443395,
+    41.0634976
+    ],
+    [
+    -8.6443073,
+    41.0634451
+    ],
+    [
+    -8.6443207,
+    41.0634167
+    ],
+    [
+    -8.6443583,
+    41.063352
+    ],
+    [
+    -8.6443609,
+    41.0631943
+    ],
+    [
+    -8.6445165,
+    41.0631073
+    ],
+    [
+    -8.6445621,
+    41.0631073
+    ],
+    [
+    -8.6446184,
+    41.0631457
+    ],
+    [
+    -8.6446157,
+    41.0631983
+    ],
+    [
+    -8.6447257,
+    41.0631902
+    ],
+    [
+    -8.6448679,
+    41.0631963
+    ],
+    [
+    -8.6449698,
+    41.0633136
+    ],
+    [
+    -8.6449832,
+    41.0634592
+    ],
+    [
+    -8.645069,
+    41.0635502
+    ],
+    [
+    -8.6452434,
+    41.0635725
+    ],
+    [
+    -8.6454338,
+    41.0635664
+    ],
+    [
+    -8.645559,
+    41.0635384
+    ],
+    [
+    -8.6456743,
+    41.0635788
+    ],
+    [
+    -8.6456206,
+    41.0636132
+    ],
+    [
+    -8.6453497,
+    41.0636274
+    ],
+    [
+    -8.6450842,
+    41.0636496
+    ],
+    [
+    -8.6449367,
+    41.0636577
+    ],
+    [
+    -8.6447945,
+    41.0636678
+    ],
+    [
+    -8.644639,
+    41.0636941
+    ],
+    [
+    -8.6446121,
+    41.0637487
+    ],
+    [
+    -8.6445746,
+    41.0638053
+    ],
+    [
+    -8.644529,
+    41.0638781
+    ],
+    [
+    -8.6445048,
+    41.0639267
+    ],
+    [
+    -8.6444592,
+    41.0639671
+    ]
+    ]]);
+
+  var searchWithin_2_danger = turf.polygon([[
+    [
+    -8.6437404,
+    41.0633968
+    ],
+    [
+    -8.6435097,
+    41.0633361
+    ],
+    [
+    -8.6434829,
+    41.0632512
+    ],
+    [
+    -8.6435151,
+    41.0631541
+    ],
+    [
+    -8.6435473,
+    41.0631137
+    ],
+    [
+    -8.6436653,
+    41.0630652
+    ],
+    [
+    -8.6436975,
+    41.0630207
+    ],
+    [
+    -8.6437082,
+    41.062964
+    ],
+    [
+    -8.6438262,
+    41.0628872
+    ],
+    [
+    -8.6439228,
+    41.0629074
+    ],
+    [
+    -8.6439657,
+    41.0629195
+    ],
+    [
+    -8.6440837,
+    41.0629762
+    ],
+    [
+    -8.6442715,
+    41.0630288
+    ],
+    [
+    -8.644352,
+    41.0630409
+    ],
+    [
+    -8.6445022,
+    41.0631258
+    ],
+    [
+    -8.6445826,
+    41.0631784
+    ],
+    [
+    -8.6446416,
+    41.063235
+    ],
+    [
+    -8.6445987,
+    41.0633604
+    ],
+    [
+    -8.6445719,
+    41.0634494
+    ],
+    [
+    -8.6444861,
+    41.0635384
+    ],
+    [
+    -8.6445075,
+    41.0636112
+    ],
+    [
+    -8.6445343,
+    41.0637932
+    ],
+    [
+    -8.6443949,
+    41.0638013
+    ],
+    [
+    -8.6442286,
+    41.0637285
+    ],
+    [
+    -8.6441642,
+    41.0635384
+    ],
+    [
+    -8.6442715,
+    41.0634858
+    ],
+    [
+    -8.6439496,
+    41.0634777
+    ],
+    [
+    -8.6438316,
+    41.0634292
+    ],
+    [
+    -8.6437404,
+    41.0633968
+    ]
+    ]]);
+
+  var searchWithin_Miramar = turf.polygon([[
+   [
+   -8.6590518,
+   41.0685323
+   ],
+   [
+   -8.656155,
+   41.0691147
+   ],
+   [
+   -8.6558975,
+   41.067319
+   ],
+   [
+   -8.65564,
+   41.0660733
+   ],
+   [
+   -8.6572708,
+   41.0650702
+   ],
+   [
+   -8.6587728,
+   41.0651996
+   ],
+   [
+   -8.6595238,
+   41.0682087
+   ],
+   [
+   -8.6590518,
+   41.0685323
+   ]
+   ]]);
+
+  var ptsWithin = turf.pointsWithinPolygon(points, searchWithin);
+
+  var pts_danger = turf.pointsWithinPolygon(points, searchWithin_2_danger);
+  var pts_danger_Miramar = turf.pointsWithinPolygon(points, searchWithin_Miramar);
+
+  if (ptsWithin.features.length > 0) {
+    console.log("Está dentro")
+    alert("Estás na zona azul ");
+
+}
+else if(pts_danger.features.length > 0){
+    console.log("Estás na dangerous")
+    alert("Estás na zona laranja ");
+}else if(pts_danger_Miramar.features.length > 0){
+    console.log("Estás em Miramar")
+    alert("Estás na zona de Praia ");
+}else{
+    alert("Não está em nenhuma");
+}
+}
+
+
+navigator.geolocation.watchPosition(checkUserPostion);
+
+
+map.addControl(new mapboxgl.NavigationControl());
+
+map.on('load', function () {
+// Add a data source containing GeoJSON data.
+map.addSource('maine', {
+    'type': 'geojson',
+    'data': {
+        'type': 'Feature',
+        'geometry': {
+            'type': 'Polygon',
+            'coordinates': [
+            [
+
+            [
+            -8.6444592,
+            41.0639671
+            ],
+            [
+            -8.644419,
+            41.0641046
+            ],
+            [
+            -8.6443922,
+            41.0642644
+            ],
+            [
+            -8.6443922,
+            41.0643534
+            ],
+            [
+            -8.6443868,
+            41.064412
+            ],
+            [
+            -8.644469,
+            41.0644444
+            ],
+            [
+            -8.6445283,
+            41.0645031
+            ],
+            [
+            -8.6445126,
+            41.0645758
+            ],
+            [
+            -8.6445143,
+            41.0646389
+            ],
+            [
+            -8.6445092,
+            41.064672
+            ],
+            [
+            -8.6444687,
+            41.0646984
+            ],
+            [
+            -8.644414,
+            41.0647211
+            ],
+            [
+            -8.6443883,
+            41.0647334
+            ],
+            [
+            -8.6443726,
+            41.0647511
+            ],
+            [
+            -8.6443528,
+            41.0647657
+            ],
+            [
+            -8.6443119,
+            41.0647827
+            ],
+            [
+            -8.6442795,
+            41.0648145
+            ],
+            [
+            -8.6442574,
+            41.0648531
+            ],
+            [
+            -8.6442112,
+            41.0649299
+            ],
+            [
+            -8.6441703,
+            41.0649856
+            ],
+            [
+            -8.6441515,
+            41.0650422
+            ],
+            [
+            -8.6441273,
+            41.0651009
+            ],
+            [
+            -8.6440496,
+            41.0651535
+            ],
+            [
+            -8.6439986,
+            41.0651373
+            ],
+            [
+            -8.6439396,
+            41.065113
+            ],
+            [
+            -8.6439235,
+            41.0650584
+            ],
+            [
+            -8.6439396,
+            41.0649775
+            ],
+            [
+            -8.6439718,
+            41.0649371
+            ],
+            [
+            -8.6439745,
+            41.06484
+            ],
+            [
+            -8.6439691,
+            41.0647793
+            ],
+            [
+            -8.6439798,
+            41.0647025
+            ],
+            [
+            -8.6439691,
+            41.0645892
+            ],
+            [
+            -8.6439691,
+            41.064478
+            ],
+            [
+            -8.6440469,
+            41.0642677
+            ],
+            [
+            -8.644122,
+            41.064201
+            ],
+            [
+            -8.6441434,
+            41.0640351
+            ],
+            [
+            -8.6442105,
+            41.0639482
+            ],
+            [
+            -8.6442644,
+            41.0638778
+            ],
+            [
+            -8.6443636,
+            41.0637808
+            ],
+            [
+            -8.644369,
+            41.0635988
+            ],
+            [
+            -8.6443985,
+            41.0635138
+            ],
+            [
+            -8.6443395,
+            41.0634976
+            ],
+            [
+            -8.6443073,
+            41.0634451
+            ],
+            [
+            -8.6443207,
+            41.0634167
+            ],
+            [
+            -8.6443583,
+            41.063352
+            ],
+            [
+            -8.6443609,
+            41.0631943
+            ],
+            [
+            -8.6445165,
+            41.0631073
+            ],
+            [
+            -8.6445621,
+            41.0631073
+            ],
+            [
+            -8.6446184,
+            41.0631457
+            ],
+            [
+            -8.6446157,
+            41.0631983
+            ],
+            [
+            -8.6447257,
+            41.0631902
+            ],
+            [
+            -8.6448679,
+            41.0631963
+            ],
+            [
+            -8.6449698,
+            41.0633136
+            ],
+            [
+            -8.6449832,
+            41.0634592
+            ],
+            [
+            -8.645069,
+            41.0635502
+            ],
+            [
+            -8.6452434,
+            41.0635725
+            ],
+            [
+            -8.6454338,
+            41.0635664
+            ],
+            [
+            -8.645559,
+            41.0635384
+            ],
+            [
+            -8.6456743,
+            41.0635788
+            ],
+            [
+            -8.6456206,
+            41.0636132
+            ],
+            [
+            -8.6453497,
+            41.0636274
+            ],
+            [
+            -8.6450842,
+            41.0636496
+            ],
+            [
+            -8.6449367,
+            41.0636577
+            ],
+            [
+            -8.6447945,
+            41.0636678
+            ],
+            [
+            -8.644639,
+            41.0636941
+            ],
+            [
+            -8.6446121,
+            41.0637487
+            ],
+            [
+            -8.6445746,
+            41.0638053
+            ],
+            [
+            -8.644529,
+            41.0638781
+            ],
+            [
+            -8.6445048,
+            41.0639267
+            ],
+            [
+            -8.6444592,
+            41.0639671
+            ]
+
+            ]
+            ]
+        }
+    }
+});
+
+map.addLayer({
+    'id': 'maine',
+    'type': 'fill',
+'source': 'maine', // reference the data source
+'layout': {},
+'paint': {
+'fill-color': 'blue', // blue color fill
+'fill-opacity': 0.5
+}
+});
+// Add a black outline around the polygon.
+map.addLayer({
+    'id': 'outline',
+    'type': 'line',
+    'source': 'maine',
+    'layout': {},
+    'paint': {
+        'line-color': '#000',
+        'line-width': 2
+    }
+});
+
+
+map.addSource('maine_2', {
+    'type': 'geojson',
+    'data': {
+        'type': 'Feature',
+        'geometry': {
+            'type': 'Polygon',
+            'coordinates': [
+            [
+
+            [
+            -8.6437404,
+            41.0633968
+            ],
+            [
+            -8.6435097,
+            41.0633361
+            ],
+            [
+            -8.6434829,
+            41.0632512
+            ],
+            [
+            -8.6435151,
+            41.0631541
+            ],
+            [
+            -8.6435473,
+            41.0631137
+            ],
+            [
+            -8.6436653,
+            41.0630652
+            ],
+            [
+            -8.6436975,
+            41.0630207
+            ],
+            [
+            -8.6437082,
+            41.062964
+            ],
+            [
+            -8.6438262,
+            41.0628872
+            ],
+            [
+            -8.6439228,
+            41.0629074
+            ],
+            [
+            -8.6439657,
+            41.0629195
+            ],
+            [
+            -8.6440837,
+            41.0629762
+            ],
+            [
+            -8.6442715,
+            41.0630288
+            ],
+            [
+            -8.644352,
+            41.0630409
+            ],
+            [
+            -8.6445022,
+            41.0631258
+            ],
+            [
+            -8.6445826,
+            41.0631784
+            ],
+            [
+            -8.6446416,
+            41.063235
+            ],
+            [
+            -8.6445987,
+            41.0633604
+            ],
+            [
+            -8.6445719,
+            41.0634494
+            ],
+            [
+            -8.6444861,
+            41.0635384
+            ],
+            [
+            -8.6445075,
+            41.0636112
+            ],
+            [
+            -8.6445343,
+            41.0637932
+            ],
+            [
+            -8.6443949,
+            41.0638013
+            ],
+            [
+            -8.6442286,
+            41.0637285
+            ],
+            [
+            -8.6441642,
+            41.0635384
+            ],
+            [
+            -8.6442715,
+            41.0634858
+            ],
+            [
+            -8.6439496,
+            41.0634777
+            ],
+            [
+            -8.6438316,
+            41.0634292
+            ],
+            [
+            -8.6437404,
+            41.0633968
+            ]
+
+            ]
+            ]
+        }
+    }
+});
+
+map.addLayer({
+    'id': 'maine_2',
+    'type': 'fill',
+'source': 'maine_2', // reference the data source
+'layout': {},
+'paint': {
+'fill-color': 'orange', // blue color fill
+'fill-opacity': 0.5
+}
+});
+// Add a black outline around the polygon.
+map.addLayer({
+    'id': 'outline_2',
+    'type': 'line',
+    'source': 'maine_2',
+    'layout': {},
+    'paint': {
+        'line-color': '#000',
+        'line-width': 1
+    }
+});
+
+map.addSource('maine_3', {
+    'type': 'geojson',
+    'data': {
+        'type': 'Feature',
+        'geometry': {
+            'type': 'Polygon',
+            'coordinates': [
+            [
+
+            [
+            -8.6590518,
+            41.0685323
+            ],
+            [
+            -8.656155,
+            41.0691147
+            ],
+            [
+            -8.6558975,
+            41.067319
+            ],
+            [
+            -8.65564,
+            41.0660733
+            ],
+            [
+            -8.6572708,
+            41.0650702
+            ],
+            [
+            -8.6587728,
+            41.0651996
+            ],
+            [
+            -8.6595238,
+            41.0682087
+            ],
+            [
+            -8.6590518,
+            41.0685323
+            ]
+            ]
+            ]
+        }
+    }
+});
+
+map.addLayer({
+    'id': 'maine_3',
+    'type': 'fill',
+'source': 'maine_3', // reference the data source
+'layout': {},
+'paint': {
+'fill-color': 'pink', // blue color fill
+'fill-opacity': 0.5
+}
+});
+// Add a black outline around the polygon.
+map.addLayer({
+    'id': 'outline_3',
+    'type': 'line',
+    'source': 'maine_3',
+    'layout': {},
+    'paint': {
+        'line-color': 'white',
+        'line-width': 0.4
+    }
+});
+
+});
+
+
+///*********************************************
+////*****************************************
+///***********************   3D     **********************
+////********************  For Loop      *********************
+///*********************************************
+////*****************************************
+///*********************************************
+////*****************************************//
+
+var array_modelos_3d = ["./barquinho_grande.glb","./barquinho_grande_verde.glb","./barquinho_grande.glb","./barquinho_grande_verde.glb"] 
+
+var array_coordenadas_objetos  = [
+[-8.644384,41.064657],
+[-8.644201, 41.064823],
+[-8.644024,41.065276],
+[ -8.658048,41.068863]
+];
+
+var altitude_mare_objetos = [0, 1, 0, 2]
+
+var rotacao = [
+[Math.PI / 2, 0, 0],
+[Math.PI / 2, 0, 0],
+[Math.PI / 2, 0, 0],
+[Math.PI / 2, 0, 0]
+]
+
+    // parameters to ensure the model is georeferenced correctly on the map
+    var modelOrigin = [-8.644384,41.064657];
+    var modelAltitude = 0;
+    var modelRotate = [Math.PI / 2, 0, 0];
+
+    var modelo_como_coordenadas = [];
+
+    var forloop_mapbox_converter_coord;
+
+    for(let ij = 0;ij<array_coordenadas_objetos.length;ij++){
+        forloop_mapbox_converter_coord = mapboxgl.MercatorCoordinate.fromLngLat(
+            array_coordenadas_objetos[ij],
+            altitude_mare_objetos[ij]
+            );
+        modelo_como_coordenadas.push(forloop_mapbox_converter_coord);
+        forloop_mapbox_converter_coord = 0;
+    }
+
+    var modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
+        modelOrigin,
+        modelAltitude
+        );
+
+    // transformation parameters to position, rotate and scale the 3D model onto the map
+    var modelTransform = {
+        translateX: modelAsMercatorCoordinate.x,
+        translateY: modelAsMercatorCoordinate.y,
+        translateZ: modelAsMercatorCoordinate.z,
+        rotateX: modelRotate[0],
+        rotateY: modelRotate[1],
+        rotateZ: modelRotate[2],
+        /* Since our 3D model is in real world meters, a scale transform needs to be
+         * applied since the CustomLayerInterface expects units in MercatorCoordinates.
+         */
+         scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits()
+     };
+
+     var modelTransform_object;
+     var THREE = window.THREE;
+
+     var camada_objetos_3d = [];
+     var declarar_var;
+     var scale_obj;
+     for(let ki=0; ki<modelo_como_coordenadas.length;ki++){
+
+        scale_obj = modelAsMercatorCoordinate.meterInMercatorCoordinateUnits();
+
+        var customLayer = {
+            id: '3d-model'+ki,
+            type: 'custom',
+            renderingMode: '3d',
+            onAdd: function (map, gl) {
+                this.camera = new THREE.Camera();
+                this.scene = new THREE.Scene();
+
+            // create two three.js lights to illuminate the model
+            var directionalLight = new THREE.DirectionalLight(0xffffff);
+            directionalLight.position.set(0, -70, 100).normalize();
+            this.scene.add(directionalLight);
+
+            var directionalLight2 = new THREE.DirectionalLight(0xffffff);
+            directionalLight2.position.set(0, 70, 100).normalize();
+            this.scene.add(directionalLight2);
+
+            // use the three.js GLTF loader to add the 3D model to the three.js scene
+            var loader = new THREE.GLTFLoader();
+            loader.load(
+                // './barquinho_grande.glb',
+                array_modelos_3d[ki],
+                function (gltf) {
+                    this.scene.add(gltf.scene);
+                }.bind(this)
+                );
+            this.map = map;
+
+            // use the Mapbox GL JS map canvas for three.js
+            this.renderer = new THREE.WebGLRenderer({
+                canvas: map.getCanvas(),
+                context: gl,
+                antialias: true
+            });
+
+            this.renderer.autoClear = false;
+        },
+        render: function (gl, matrix) {
+            var rotationX = new THREE.Matrix4().makeRotationAxis(
+                new THREE.Vector3(1, 0, 0),
+                rotacao[ki][0]
+                );
+            var rotationY = new THREE.Matrix4().makeRotationAxis(
+                new THREE.Vector3(0, 1, 0),
+                rotacao[ki][1]
+                );
+            var rotationZ = new THREE.Matrix4().makeRotationAxis(
+                new THREE.Vector3(0, 0, 1),
+                rotacao[ki][2]
+                );
+
+            var m = new THREE.Matrix4().fromArray(matrix);
+            var l = new THREE.Matrix4()
+            .makeTranslation(
+                modelo_como_coordenadas[ki].x,
+                modelo_como_coordenadas[ki].y,
+                modelo_como_coordenadas[ki].z
+                )
+            .scale(
+                new THREE.Vector3(
+                    scale_obj,
+                    -scale_obj,
+                    scale_obj
+                    )
+                )
+            .multiply(rotationX)
+            .multiply(rotationY)
+            .multiply(rotationZ);
+
+            this.camera.projectionMatrix = m.multiply(l);
+            this.renderer.resetState();
+            this.renderer.render(this.scene, this.camera);
+            this.map.triggerRepaint();
+        }
+    };
+
+    camada_objetos_3d.push(customLayer);
+    customLayer=[];
+
+}
+
+console.log(camada_objetos_3d);
+
+
+map.on('style.load', function () {
+        //map.addLayer(customLayer, 'waterway-label');
+        data_camadas = [customLayer];
+        for(let i=0;i<camada_objetos_3d.length;i++){
+
+            map.addLayer(camada_objetos_3d[i], 'waterway-label');
+        }
+
+    });
+</script>
+
+</body>
+</html>
